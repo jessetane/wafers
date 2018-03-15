@@ -1,0 +1,10 @@
+{
+  "name": "wafers",
+  "version": "1.0.0",
+  "bin": {
+    "wafers": "index.sh"
+  },
+  "repository": "https://github.com/jessetane/wafers",
+  "author": "jesse.tane@gmail.com",
+  "license": "MIT"
+}
