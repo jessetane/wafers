@@ -87,6 +87,10 @@ if [ -n "$parent" ]; then
   if [ ! -d "${wafer}/data" ]; then
     mkdir -p "${wafer}/"{work,data} "$stack"
     echo "$parent" > "${wafer}/parent"
+    if [ -f "${wafers}/${parent}/data/etc/machine-id" ]; then
+      mkdir "${wafer}/data/etc"
+      echo "$(cat /dev/urandom | tr -dc 'a-f0-9' | head -c 32)" > "${wafer}/data/etc/machine-id"
+    fi
     user="$(stat -c %u "${wafers}/${parent}/data")"
     group="$(stat -c %g "${wafers}/${parent}/data")"
     chown -R "${user}:${group}" "${wafer}/data"
