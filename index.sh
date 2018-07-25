@@ -84,20 +84,20 @@ if [ -n "$parent" ]; then
   }
   ancestry=""
   traceancestry "$parent"
-  mkdir -p "${wafer}/"{work,data} "$stack"
-  echo "$parent" > "${wafer}/parent"
+  if [ ! -d "${wafer}/data" ]; then
+    mkdir -p "${wafer}/"{work,data} "$stack"
+    echo "$parent" > "${wafer}/parent"
+    user="$(stat -c %u "${wafers}/${parent}/data")"
+    group="$(stat -c %g "${wafers}/${parent}/data")"
+    chown -R "${user}:${group}" "${wafer}/data"
+  fi
   mount -t overlay -o lowerdir="$ancestry",workdir="${wafer}/work",upperdir="${wafer}/data" overlay "$stack"
-  user="$(stat -c %u "${wafers}/${parent}/data")"
-  group="$(stat -c %g "${wafers}/${parent}/data")"
 elif [ -d "${wafer}/data" ]; then
   mkdir -p "$stack"
   mount -o bind "${wafer}/data" "$stack"
-  user="$(stat -c %u "${wafer}/data")"
-  group="$(stat -c %g "${wafer}/data")"
 else
   echo "wafer not found" >&2
   exit 6
 fi
 
-chown "${user}:${group}" "$stack"
 echo "${numberOfWafersStacked} wafers stacked at ${stack}"
