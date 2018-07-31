@@ -85,7 +85,7 @@ if [ -n "$parent" ]; then
   ancestry=""
   traceancestry "$parent"
   if [ ! -d "${wafer}/data" ]; then
-    mkdir -p "${wafer}/"{work,data} "$stack"
+    mkdir -p "${wafer}/"{work,data}
     echo "$parent" > "${wafer}/parent"
     if [ -f "${wafers}/${parent}/data/etc/machine-id" ]; then
       mkdir "${wafer}/data/etc"
@@ -95,6 +95,7 @@ if [ -n "$parent" ]; then
     group="$(stat -c %g "${wafers}/${parent}/data")"
     chown -R "${user}:${group}" "${wafer}/data"
   fi
+  mkdir -p "$stack"
   mount -t overlay -o lowerdir="$ancestry",workdir="${wafer}/work",upperdir="${wafer}/data" overlay "$stack"
 elif [ -d "${wafer}/data" ]; then
   mkdir -p "$stack"
